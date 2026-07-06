@@ -5,10 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HealthFragment">
+        <!--
+            LinearLayout: コンポーネントを一列に並べるレイアウト
+                orientation: 縦方向に並べる
+                padding: 上下左右に余白を追加
+        -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
-        android:textSize="100sp"/>
+            <!-- 身長入力 -->
+            <TextView
+                android:text="@string/height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/etHeight"
+                android:hint="@string/input_height"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- 体重入力 -->
+            <TextView
+                android:text="@string/weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/etWeight"
+                android:hint="@string/input_weight"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <!-- 計算実行ボタン -->
+            <Button
+                android:id="@+id/btnCalculate"
+                android:text="@string/calculate_bmi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <!-- BIM値 -->
+            <TextView
+                android:text="@string/bmi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvBmiValue"
+                android:text="@string/hyphen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <!-- カテゴリ -->
+            <TextView
+                android:text="@string/result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvCategoryValue"
+                android:text="@string/hyphen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 </FrameLayout>
