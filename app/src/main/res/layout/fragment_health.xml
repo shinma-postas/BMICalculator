@@ -27,7 +27,8 @@
                 android:hint="@string/input_height"
                 android:inputType="numberDecimal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:minHeight="48dp" />
 
             <!-- 体重入力 -->
             <TextView
@@ -40,7 +41,8 @@
                 android:hint="@string/input_weight"
                 android:inputType="numberDecimal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:minHeight="48dp" />
 
 
             <!-- 計算実行ボタン -->
