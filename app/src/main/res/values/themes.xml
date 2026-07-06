@@ -1,6 +1,8 @@
+<!-- テーマ定義ファイル -->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.BMICalculator" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- parent: 親テーマとしてAppCompatライブラリのテーマを参照 -->
+    <style name="Base.Theme.BMICalculator" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>

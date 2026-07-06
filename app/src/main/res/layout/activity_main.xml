@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- xmlns(xml Namespace): タグや属性の参照元を定義する。 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,6 +8,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <!-- developer.android.com/develop/ui/views/components/appbar/setting-up -->
+    <!--
+        android: xmlns:androidのvalueを参照。googleが作った公式の設定
+            id: タグの識別子を追加
+                layout_width: タグの横幅指定
+                match_parent: 親要素の横幅に合わせる
+            layout_height: タグの縦幅指定
+                ?attr/: 親テーマを参照するという意味のキーワード
+                    actionBarSize: テーマからactionBarSize定義を参照
+            background: 背景色の設定
+                ?attr/colorPrimary: テーマからcolorPrimary定義を参照
+            elevation: 配置の縦軸を設定(マテリアルデザイン)
+            theme: 指定したタグとその子タグに対してデザインテーマを指定する
+                @style: style定義ファイルを参照する
+                ThemeOverlay: 一部の設定を変更、上書きする
+                AppCompat: AppCompatActivityと互換性がある
+                ActionBar: ActionBarという定義を参照
+        app: xmlns:appを参照。googleの拡張ライブラリや、自作の独自設定を使うときの設定
+            title: ツールバーに表示されるタイトルを設定
+            layout_constraint: ConstraintLayoutの中の設定を明示
+            Top_toTopOf: 自分のtopを指定した相手のtopに合わせる
+                parent: 親要素を基準として指定
+            popupTheme: ツールバーをタップしたときに表示されるポップアップへのテーマ設定
+    -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+        <!--
+            wrap_content: 要素が入る最小限のサイズ
+            layout_gravity: 文字を中央揃えに設定
+        -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:text="健康診断アプリ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:layout_width="wrap_content"
