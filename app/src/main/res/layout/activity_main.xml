@@ -7,7 +7,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
     <!--
         ConstraintLayout: 位置関係を他の要素に紐づけて配置できるUIコンテナ(今回parentに紐付け)
             android: xmlns:androidのvalueを参照。googleが作った公式の設定
