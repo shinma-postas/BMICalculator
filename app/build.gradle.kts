@@ -10,6 +10,11 @@ android {
         }
     }
 
+    // viewBinding有効化
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.bmicalculator"
         minSdk = 28
@@ -39,7 +44,15 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
+
+    // viewModels()のproperty delegateの依存関係
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
+
+    // viewModelFactoryのDSLのの依存関係
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
 }
