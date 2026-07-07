@@ -18,7 +18,7 @@ sealed class BmiCalculationResult {
 // バリデーションと計算と保存を行う。
 class CalculateAndSaveBmiUseCase(private val healthRepository: HealthRepository) {
     // invokeに対しoperatorをつけることでクラスのインスタンスを関数のように呼び出し可能にする
-        operator fun invoke(heightText: String, weightText: String): BmiCalculationResult {
+    operator fun invoke(heightText: String, weightText: String): BmiCalculationResult {
         // 空白バリデーション
         if (heightText.isBlank()) {
             return BmiCalculationResult.ValidationError(
