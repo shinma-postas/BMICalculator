@@ -52,7 +52,7 @@ class CalculateAndSaveBmiUseCase(private val healthRepository: HealthRepository)
             )
         }
 
-        // modelに準拠
+        // modelのインスタンスを作成
         val healthData: HealthData = HealthData(heightCm = heightCm, weightKg = weightKg)
 
         // cmをmに変換
@@ -72,6 +72,7 @@ class CalculateAndSaveBmiUseCase(private val healthRepository: HealthRepository)
             else -> "高度肥満"
         }
 
+        // modelのインスタンスを作成
         val result: BmiResult = BmiResult(bmi = bmi, category = category)
 
         // 計算結果を保存
