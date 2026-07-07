@@ -2,8 +2,8 @@ package com.example.bmicalculator.ui.health
 
 import androidx.lifecycle.ViewModel
 import com.example.bmicalculator.domain.model.BmiResult
-import com.example.bmicalculator.domain.model.HealthData
 import com.example.bmicalculator.domain.usecase.CalculateAndSaveBmiUseCase
+import com.example.bmicalculator.domain.usecase.BmiCalculationResult
 import com.example.bmicalculator.data.repository.HealthRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,51 +29,17 @@ class HealthViewModel(private val calculateAndSaveBmiUseCase: CalculateAndSaveBm
 
     // 入力値バリデーションと計算呼び出し
     fun onCalculateClicked(heightText: String, weightText: String) {
-        // 空白バリデーション
-        if (heightText.isBlank()) {
-            _uiState.value = HealthUiState.Error(
-                heightError = "身長(cm)を入力してください",
-                weightError = null
-            )
-            return
+        when (val calcResult = calculateAndSaveBmiUseCase(heightText, weightText)) {
+            is BmiCalculationResult.Success -> {
+                _uiState.value = HealthUiState.Success(calcResult.result)
+            }
+            is BmiCalculationResult.ValidationError -> {
+                _uiState.value = HealthUiState.Error(
+                    heightError = calcResult.heightError,
+                    weightError = calcResult.weightError
+                )
+            }
         }
-        if (weightText.isBlank()) {
-            _uiState.value = HealthUiState.Error(
-                heightError = null,
-                weightError = "体重(kg)を入力してください"
-            )
-            return
-        }
-
-        // Stringから数値への変換。失敗時はnullが返る
-        val heightCm: Double? = heightText.toDoubleOrNull()
-        val weightKg: Double? = weightText.toDoubleOrNull()
-
-        // 数値バリデーション
-        if (heightCm == null) {
-            // 画面状態をエラーに更新
-            _uiState.value = HealthUiState.Error(
-                heightError = "身長(cm)は数値で入力してください",
-                weightError = null
-            )
-            return
-        }
-        if (weightKg == null) {
-            _uiState.value = HealthUiState.Error(
-                heightError = null,
-                weightError = "体重(kg)は数値で入力してください"
-            )
-            return
-        }
-
-        // モデルに準拠
-        val healthData: HealthData = HealthData(heightCm = heightCm, weightKg = weightKg)
-
-        // UseCaseを呼び出しBMI計算し結果取得
-        val result: BmiResult = calculateAndSaveBmiUseCase(healthData)
-
-        // 状態をSuccessに更新
-        _uiState.value = HealthUiState.Success(result)
     }
 
     // 依存を必要とするvmをインスタンス化するときに、必要とする依存を定義
