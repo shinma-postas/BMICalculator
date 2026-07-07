@@ -11,7 +11,4 @@ class HealthRepositoryImpl : HealthRepository {
     override fun saveResult(result: BmiResult) {
         lastResult = result
     }
-
-    // メンバ変数を返す
-    override fun getLastResult(): BmiResult? = lastResult
 }

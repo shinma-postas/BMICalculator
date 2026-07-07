@@ -3,8 +3,7 @@ package com.example.bmicalculator.ui.health
 import androidx.lifecycle.ViewModel
 import com.example.bmicalculator.domain.model.BmiResult
 import com.example.bmicalculator.domain.model.HealthData
-import com.example.bmicalculator.domain.repository.HealthRepository
-import com.example.bmicalculator.domain.usecase.CalculateBmiUseCase
+import com.example.bmicalculator.domain.usecase.CalculateAndSaveBmiUseCase
 import com.example.bmicalculator.data.repository.HealthRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,11 +20,8 @@ sealed class HealthUiState {
     data class Error(val heightError: String?, val weightError: String?) : HealthUiState()
 }
 
-class HealthViewModel(
-    private val calculateBmiUseCase: CalculateBmiUseCase,
-    private val healthRepository: HealthRepository
-) : ViewModel() {
-    // 画面状態(デフォルトIdel)
+class HealthViewModel(private val calculateAndSaveBmiUseCase: CalculateAndSaveBmiUseCase) : ViewModel() {
+    // 画面状態(デフォルトIdle)
     private val _uiState = MutableStateFlow<HealthUiState>(HealthUiState.Idle)
 
     // 外部から参照され、読み取り専用なstate
@@ -70,11 +66,11 @@ class HealthViewModel(
             return
         }
 
-        // UseCaseを呼び出しBMI計算し結果取得
-        val result = calculateBmiUseCase(HealthData(heightCm = heightCm, weightKg = weightKg))
+        // モデルに準拠
+        val healthData: HealthData = HealthData(heightCm = heightCm, weightKg = weightKg)
 
-        // 結果はRepositoryに保存
-        healthRepository.saveResult(result)
+        // UseCaseを呼び出しBMI計算し結果取得
+        val result: BmiResult = calculateAndSaveBmiUseCase(healthData)
 
         // 状態をSuccessに更新
         _uiState.value = HealthUiState.Success(result)
@@ -88,8 +84,9 @@ class HealthViewModel(
             initializer {
                 // 実際に依存を渡す
                 HealthViewModel(
-                    calculateBmiUseCase = CalculateBmiUseCase(),
-                    healthRepository = HealthRepositoryImpl()
+                    calculateAndSaveBmiUseCase = CalculateAndSaveBmiUseCase(
+                        healthRepository = HealthRepositoryImpl()
+                    )
                 )
             }
         }

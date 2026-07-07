@@ -23,7 +23,7 @@ class HealthFragment : Fragment() {
 
     // Factory経由でViewModelを生成
     // ViewModelProvider.Factoryは引数なしコンストラクタしか呼べないので、カスタムFactoryで依存を注入する
-    private val viewModel: HealthViewModel by viewModels { HealthViewModel.Factory  }
+    private val viewModel: HealthViewModel by viewModels { HealthViewModel.Factory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,8 +65,6 @@ class HealthFragment : Fragment() {
 
                         // 成功時、errorをnull、TextViewに値を挿入
                         is HealthUiState.Success -> {
-                            binding.etHeight.error = null
-                            binding.etWeight.error = null
                             binding.tvBmiValue.text = state.result.bmi.toString()
                             binding.tvCategoryValue.text = state.result.category
                         }
