@@ -66,7 +66,7 @@ class HealthFragment : Fragment() {
                         // 成功時、errorをnull、TextViewに値を挿入
                         is HealthUiState.Success -> {
                             binding.tvBmiValue.text = state.result.bmi.toString()
-                            binding.tvCategoryValue.text = state.result.category
+                            binding.tvCategoryValue.text = state.result.category.label
                         }
 
                         // 失敗時、errorに値を挿入

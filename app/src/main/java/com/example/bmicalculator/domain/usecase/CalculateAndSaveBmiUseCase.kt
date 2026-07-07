@@ -1,5 +1,6 @@
 package com.example.bmicalculator.domain.usecase
 
+import com.example.bmicalculator.domain.model.BmiCategory
 import com.example.bmicalculator.domain.model.BmiResult
 import com.example.bmicalculator.domain.model.HealthData
 import com.example.bmicalculator.domain.repository.HealthRepository
@@ -17,7 +18,7 @@ sealed class BmiCalculationResult {
 // バリデーションと計算と保存を行う。
 class CalculateAndSaveBmiUseCase(private val healthRepository: HealthRepository) {
     // invokeに対しoperatorをつけることでクラスのインスタンスを関数のように呼び出し可能にする
-    operator fun invoke(heightText: String, weightText: String): BmiCalculationResult {
+        operator fun invoke(heightText: String, weightText: String): BmiCalculationResult {
         // 空白バリデーション
         if (heightText.isBlank()) {
             return BmiCalculationResult.ValidationError(
@@ -65,12 +66,7 @@ class CalculateAndSaveBmiUseCase(private val healthRepository: HealthRepository)
         val bmi: Double = (rawBmi * 10).roundToInt() / 10.0
 
         // 結果からカテゴリを判定
-        val category: String = when {
-            bmi < 18.5 -> "低体重"
-            bmi < 25.0 -> "標準"
-            bmi < 30.0 -> "肥満"
-            else -> "高度肥満"
-        }
+        val category: BmiCategory = BmiCategory.fromBmi(bmi)
 
         // modelのインスタンスを作成
         val result: BmiResult = BmiResult(bmi = bmi, category = category)
