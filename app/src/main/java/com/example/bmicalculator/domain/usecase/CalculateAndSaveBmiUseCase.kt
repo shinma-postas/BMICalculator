@@ -2,8 +2,8 @@ package com.example.bmicalculator.domain.usecase
 
 import com.example.bmicalculator.domain.model.BmiCategory
 import com.example.bmicalculator.domain.model.BmiResult
-import com.example.bmicalculator.domain.model.HealthData
-import com.example.bmicalculator.domain.repository.HealthRepository
+import com.example.bmicalculator.domain.model.BodyData
+import com.example.bmicalculator.domain.repository.BmiRepository
 import kotlin.math.roundToInt
 
 // 計算結果を返すsealed class
@@ -16,7 +16,7 @@ sealed class BmiCalculationResult {
 }
 
 // バリデーションと計算と保存を行う。
-class CalculateAndSaveBmiUseCase(private val healthRepository: HealthRepository) {
+class CalculateAndSaveBmiUseCase(private val bmiRepository: BmiRepository) {
     // invokeに対しoperatorをつけることでクラスのインスタンスを関数のように呼び出し可能にする
     operator fun invoke(heightText: String, weightText: String): BmiCalculationResult {
         // 空白バリデーション
@@ -54,13 +54,13 @@ class CalculateAndSaveBmiUseCase(private val healthRepository: HealthRepository)
         }
 
         // modelのインスタンスを作成
-        val healthData: HealthData = HealthData(heightCm = heightCm, weightKg = weightKg)
+        val bodyData: BodyData = BodyData(heightCm = heightCm, weightKg = weightKg)
 
         // cmをmに変換
-        val heightM: Double = healthData.heightCm / 100.0
+        val heightM: Double = bodyData.heightCm / 100.0
 
         // BMIを計算
-        val rawBmi: Double = healthData.weightKg / (heightM * heightM)
+        val rawBmi: Double = bodyData.weightKg / (heightM * heightM)
 
         // 小数点第1位に丸める
         val bmi: Double = (rawBmi * 10).roundToInt() / 10.0
@@ -72,7 +72,7 @@ class CalculateAndSaveBmiUseCase(private val healthRepository: HealthRepository)
         val result: BmiResult = BmiResult(bmi = bmi, category = category)
 
         // 計算結果を保存
-        healthRepository.saveResult(result)
+        bmiRepository.saveResult(result)
 
         return BmiCalculationResult.Success(result)
     }

@@ -3,7 +3,7 @@ package com.example.bmicalculator.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bmicalculator.R
-import com.example.bmicalculator.ui.health.HealthFragment
+import com.example.bmicalculator.ui.bmi.BmiFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity() {
             // activityにfragmentを読み込み
             supportFragmentManager
                 .beginTransaction()
-                // fragment_containerを新しく生成したHealthFragmentインスタンスに置き換え(削除→追加)
-                .replace(R.id.fragment_container, HealthFragment())
+                // fragment_containerを新しく生成したBmiFragmentインスタンスに置き換え(削除→追加)
+                .replace(R.id.fragment_container, BmiFragment())
                 .commit()
         }
     }

@@ -1,10 +1,10 @@
 package com.example.bmicalculator.data.repository
 
 import com.example.bmicalculator.domain.model.BmiResult
-import com.example.bmicalculator.domain.repository.HealthRepository
+import com.example.bmicalculator.domain.repository.BmiRepository
 
 // 計算結果を保持するリポジトリ
-class HealthRepositoryImpl : HealthRepository {
+class BmiRepositoryImpl : BmiRepository {
     private var lastResult: BmiResult? = null
 
     // 結果をメンバ変数に代入

@@ -1,10 +1,10 @@
-package com.example.bmicalculator.ui.health
+package com.example.bmicalculator.ui.bmi
 
 import androidx.lifecycle.ViewModel
 import com.example.bmicalculator.domain.model.BmiResult
 import com.example.bmicalculator.domain.usecase.CalculateAndSaveBmiUseCase
 import com.example.bmicalculator.domain.usecase.BmiCalculationResult
-import com.example.bmicalculator.data.repository.HealthRepositoryImpl
+import com.example.bmicalculator.data.repository.BmiRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,27 +14,27 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 
 // 画面が取りうる状態を型で管理
 // sealed: 各状態ごとにデータ構造を型として表現でき、それぞれ固有のデータが持てる
-sealed class HealthUiState {
-    data object Idle : HealthUiState()
-    data class Success(val result: BmiResult) : HealthUiState()
-    data class Error(val heightError: String?, val weightError: String?) : HealthUiState()
+sealed class BmiUiState {
+    data object Idle : BmiUiState()
+    data class Success(val result: BmiResult) : BmiUiState()
+    data class Error(val heightError: String?, val weightError: String?) : BmiUiState()
 }
 
-class HealthViewModel(private val calculateAndSaveBmiUseCase: CalculateAndSaveBmiUseCase) : ViewModel() {
+class BmiViewModel(private val calculateAndSaveBmiUseCase: CalculateAndSaveBmiUseCase) : ViewModel() {
     // 画面状態(デフォルトIdle)
-    private val _uiState = MutableStateFlow<HealthUiState>(HealthUiState.Idle)
+    private val _uiState = MutableStateFlow<BmiUiState>(BmiUiState.Idle)
 
     // 外部から参照され、読み取り専用なstate
-    val uiState: StateFlow<HealthUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<BmiUiState> = _uiState.asStateFlow()
 
     // 入力値バリデーションと計算呼び出し
     fun onCalculateClicked(heightText: String, weightText: String) {
         when (val calcResult = calculateAndSaveBmiUseCase(heightText, weightText)) {
             is BmiCalculationResult.Success -> {
-                _uiState.value = HealthUiState.Success(calcResult.result)
+                _uiState.value = BmiUiState.Success(calcResult.result)
             }
             is BmiCalculationResult.ValidationError -> {
-                _uiState.value = HealthUiState.Error(
+                _uiState.value = BmiUiState.Error(
                     heightError = calcResult.heightError,
                     weightError = calcResult.weightError
                 )
@@ -49,9 +49,9 @@ class HealthViewModel(private val calculateAndSaveBmiUseCase: CalculateAndSaveBm
             // ここでインスタンス作成レシピを登録
             initializer {
                 // 実際に依存を渡す
-                HealthViewModel(
+                BmiViewModel(
                     calculateAndSaveBmiUseCase = CalculateAndSaveBmiUseCase(
-                        healthRepository = HealthRepositoryImpl()
+                        bmiRepository = BmiRepositoryImpl()
                     )
                 )
             }

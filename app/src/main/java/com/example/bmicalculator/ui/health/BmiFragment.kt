@@ -1,4 +1,4 @@
-package com.example.bmicalculator.ui.health
+package com.example.bmicalculator.ui.bmi
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,26 +12,26 @@ import android.view.ViewGroup
 import kotlinx.coroutines.launch
 
 // viewへのアクセスを提供するクラス
-import com.example.bmicalculator.databinding.FragmentHealthBinding
+import com.example.bmicalculator.databinding.FragmentBmiBinding
 
-class HealthFragment : Fragment() {
+class BmiFragment : Fragment() {
     // nullで初期化
-    private var _binding: FragmentHealthBinding? = null
+    private var _binding: FragmentBmiBinding? = null
 
     // !!で_bindingをnon-null化 処理の中で使うbindingはnullでない保証をする
     private val binding get() = _binding!!
 
     // Factory経由でViewModelを生成
     // ViewModelProvider.Factoryは引数なしコンストラクタしか呼べないので、カスタムFactoryで依存を注入する
-    private val viewModel: HealthViewModel by viewModels { HealthViewModel.Factory }
+    private val viewModel: BmiViewModel by viewModels { BmiViewModel.Factory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // fragment_health.xml をinflateし、FragmentHealthBindingのインスタンスを生成
-        _binding = FragmentHealthBinding.inflate(inflater, container, false)
+        // fragment_bmi.xml をinflateし、FragmentBmiBindingのインスタンスを生成
+        _binding = FragmentBmiBinding.inflate(inflater, container, false)
 
         // viewのroot(xmlの一番外側のタグ)を返す
         return binding.root
@@ -61,16 +61,16 @@ class HealthFragment : Fragment() {
                 viewModel.uiState.collect { state ->
                     when (state) {
                         // アイドル時は何もしない
-                        is HealthUiState.Idle -> Unit
+                        is BmiUiState.Idle -> Unit
 
                         // 成功時、errorをnull、TextViewに値を挿入
-                        is HealthUiState.Success -> {
+                        is BmiUiState.Success -> {
                             binding.tvBmiValue.text = state.result.bmi.toString()
                             binding.tvCategoryValue.text = state.result.category.label
                         }
 
                         // 失敗時、errorに値を挿入
-                        is HealthUiState.Error -> {
+                        is BmiUiState.Error -> {
                             binding.etHeight.error = state.heightError
                             binding.etWeight.error = state.weightError
                         }

@@ -1,6 +1,6 @@
 package com.example.bmicalculator.domain.model
 
-data class HealthData(
+data class BodyData(
     val heightCm: Double,
     val weightKg: Double
 )
