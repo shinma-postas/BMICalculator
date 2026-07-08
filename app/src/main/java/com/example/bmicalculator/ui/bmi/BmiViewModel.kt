@@ -1,5 +1,6 @@
 package com.example.bmicalculator.ui.bmi
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bmicalculator.domain.model.BmiResult
@@ -18,7 +19,10 @@ sealed class BmiUiState {
     data object Idle : BmiUiState()
     data class Loaded(val result: BmiResult) : BmiUiState() // 起動時・前回値の復元
     data class Calculated(val result: BmiResult) : BmiUiState() // ボタン押下による計算結果
-    data class Error(val heightError: String?, val weightError: String?) : BmiUiState()
+    data class Error(
+        @StringRes val heightError: Int?,
+        @StringRes val weightError: Int?
+    ) : BmiUiState()
 }
 
 class BmiViewModel(

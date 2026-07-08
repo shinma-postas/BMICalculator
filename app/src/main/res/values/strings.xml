@@ -8,4 +8,10 @@
     <string name="weight">体重(kg)</string>
     <string name="input_weight">体重(kg)を入力</string>
     <string name="hyphen">-</string>
+    <string name="please_enter_height">身長(cm)を入力してください</string>
+    <string name="please_enter_weight">体重(kg)を入力してください</string>
+    <string name="please_enter_height_as_num">身長(cm)は数値で入力してください</string>
+    <string name="please_enter_weight_as_num">体重(kg)は数値で入力してください</string>
+    <string name="height_must_greater_than_0">身長は0より大きい値である必要があります</string>
+    <string name="weight_must_greater_than_0">体重は0より大きい値である必要があります</string>
 </resources>

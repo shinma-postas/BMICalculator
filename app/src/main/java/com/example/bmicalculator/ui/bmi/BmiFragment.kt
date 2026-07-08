@@ -83,8 +83,8 @@ class BmiFragment : Fragment() {
                         // 失敗時
                         is BmiUiState.Error -> {
                             // TextEditのerrorに値を挿入
-                            binding.etHeight.error = state.heightError
-                            binding.etWeight.error = state.weightError
+                            binding.etHeight.error = state.heightError?.let { getString(it) }
+                            binding.etWeight.error = state.weightError?.let { getString(it) }
                         }
                     }
                 }

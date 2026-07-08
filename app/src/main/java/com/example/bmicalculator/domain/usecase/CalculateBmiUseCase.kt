@@ -1,5 +1,7 @@
 package com.example.bmicalculator.domain.usecase
 
+import androidx.annotation.StringRes
+import com.example.bmicalculator.R
 import com.example.bmicalculator.domain.model.BmiCategory
 import com.example.bmicalculator.domain.model.BmiResult
 import com.example.bmicalculator.domain.model.BodyData
@@ -10,8 +12,9 @@ import kotlin.math.roundToInt
 sealed class BmiCalculationResult {
     data class Success(val result: BmiResult) : BmiCalculationResult()
     data class ValidationError(
-        val heightError: String? = null,
-        val weightError: String? = null
+        // @StringRes: strings.xmlの文字列のidを指すことを示す。
+        @StringRes val heightError: Int? = null,
+        @StringRes val weightError: Int? = null,
     ) : BmiCalculationResult()
 }
 
@@ -22,34 +25,34 @@ class CalculateBmiUseCase(private val bmiRepository: BmiRepository) {
         // 空白バリデーション
         if (heightText.isBlank()) {
             return BmiCalculationResult.ValidationError(
-                heightError = "身長(cm)を入力してください"
+                heightError = R.string.please_enter_height
             )
         }
         if (weightText.isBlank()) {
             return BmiCalculationResult.ValidationError(
-                weightError = "体重(kg)を入力してください"
+                weightError = R.string.please_enter_weight
             )
         }
 
-        // 数値バリデーション(Stringから数値への変換。失敗時はnullが返る)
+        // 数値バリデーション
         val heightCm = heightText.toDoubleOrNull()
             ?: return BmiCalculationResult.ValidationError(
-                heightError = "身長(cm)は数値で入力してください"
+                heightError = R.string.please_enter_height_as_num
             )
         val weightKg = weightText.toDoubleOrNull()
             ?: return BmiCalculationResult.ValidationError(
-                weightError = "体重(kg)は数値で入力してください"
+                weightError = R.string.please_enter_weight_as_num // ※元のコードのバグ(heightErrorになっていたの)も修正
             )
 
         // 正の値バリデーション
         if (heightCm <= 0) {
             return BmiCalculationResult.ValidationError(
-                heightError = "身長は0より大きい値である必要があります"
+                heightError = R.string.height_must_greater_than_0
             )
         }
         if (weightKg <= 0) {
             return BmiCalculationResult.ValidationError(
-                weightError = "体重は0より大きい値である必要があります"
+                weightError = R.string.weight_must_greater_than_0
             )
         }
 
