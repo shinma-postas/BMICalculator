@@ -2,7 +2,7 @@ package com.example.bmicalculator.ui.bmi
 
 import androidx.lifecycle.ViewModel
 import com.example.bmicalculator.domain.model.BmiResult
-import com.example.bmicalculator.domain.usecase.CalculateAndSaveBmiUseCase
+import com.example.bmicalculator.domain.usecase.CalculateBmiUseCase
 import com.example.bmicalculator.domain.usecase.BmiCalculationResult
 import com.example.bmicalculator.data.repository.BmiRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ sealed class BmiUiState {
     data class Error(val heightError: String?, val weightError: String?) : BmiUiState()
 }
 
-class BmiViewModel(private val calculateAndSaveBmiUseCase: CalculateAndSaveBmiUseCase) : ViewModel() {
+class BmiViewModel(private val calculateBmiUseCase: CalculateBmiUseCase) : ViewModel() {
     // 画面状態(デフォルトIdle)
     private val _uiState = MutableStateFlow<BmiUiState>(BmiUiState.Idle)
 
@@ -29,7 +29,7 @@ class BmiViewModel(private val calculateAndSaveBmiUseCase: CalculateAndSaveBmiUs
 
     // 入力値バリデーションと計算呼び出し
     fun onCalculateClicked(heightText: String, weightText: String) {
-        when (val calcResult = calculateAndSaveBmiUseCase(heightText, weightText)) {
+        when (val calcResult = calculateBmiUseCase(heightText, weightText)) {
             is BmiCalculationResult.Success -> {
                 _uiState.value = BmiUiState.Success(calcResult.result)
             }
@@ -50,7 +50,7 @@ class BmiViewModel(private val calculateAndSaveBmiUseCase: CalculateAndSaveBmiUs
             initializer {
                 // 実際に依存を渡す
                 BmiViewModel(
-                    calculateAndSaveBmiUseCase = CalculateAndSaveBmiUseCase(
+                    calculateBmiUseCase = CalculateBmiUseCase(
                         bmiRepository = BmiRepositoryImpl()
                     )
                 )
