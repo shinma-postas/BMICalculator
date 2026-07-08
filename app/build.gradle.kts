@@ -48,8 +48,8 @@ dependencies {
     // viewModels()のproperty delegateの依存関係
     implementation("androidx.fragment:fragment-ktx:1.8.9")
 
-    // viewModelFactoryのDSLのの依存関係
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0")
+    // dataStoreの依存関係
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)

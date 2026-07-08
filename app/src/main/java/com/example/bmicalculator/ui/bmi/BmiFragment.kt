@@ -1,18 +1,18 @@
 package com.example.bmicalculator.ui.bmi
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import kotlinx.coroutines.launch
 
 // viewへのアクセスを提供するクラス
 import com.example.bmicalculator.databinding.FragmentBmiBinding
+import kotlinx.coroutines.launch
 
 class BmiFragment : Fragment() {
     // nullで初期化
@@ -23,7 +23,9 @@ class BmiFragment : Fragment() {
 
     // Factory経由でViewModelを生成
     // ViewModelProvider.Factoryは引数なしコンストラクタしか呼べないので、カスタムFactoryで依存を注入する
-    private val viewModel: BmiViewModel by viewModels { BmiViewModel.Factory }
+    private val viewModel: BmiViewModel by viewModels {
+        BmiViewModelFactory(requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,27 +52,37 @@ class BmiFragment : Fragment() {
             viewModel.onCalculateClicked(heightStr, weightStr)
         }
 
-        // コルーチン定義
-        //     viewLifecycleOwner: fragmentのviewライフサイクルを持つライフサイクルオーナー
-        //     lifecycleScope: ライフサイクルに紐づいたCoroutineScope
-        //     launch: コルーチンを起動
+        // コルーチンを起動
         viewLifecycleOwner.lifecycleScope.launch {
-            // STARTED以上(STARTED~RESUMED)の状態の間だけ実行する
+            // ライフサイクル連動(STARTED未満で自動キャンセル、STARTEDに戻ると再実行)
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // viewModel.uiStateをstateに受け取り、新しい値がemitされるたび、ラムダを実行
+                // Flowの値監視・処理
                 viewModel.uiState.collect { state ->
                     when (state) {
                         // アイドル時は何もしない
                         is BmiUiState.Idle -> Unit
 
-                        // 成功時、errorをnull、TextViewに値を挿入
-                        is BmiUiState.Success -> {
+                        // 起動、復元時
+                        is BmiUiState.Loaded -> {
+                            // TextEditに入力値を復元
+                            binding.etHeight.setText(state.result.bodyData.heightCm.toString())
+                            binding.etWeight.setText(state.result.bodyData.weightKg.toString())
+
+                            // bmi結果テキストを復元
                             binding.tvBmiValue.text = state.result.bmi.toString()
                             binding.tvCategoryValue.text = state.result.category.label
                         }
 
-                        // 失敗時、errorに値を挿入
+                        // 計算完了時
+                        is BmiUiState.Calculated -> {
+                            // bmi結果テキストを更新
+                            binding.tvBmiValue.text = state.result.bmi.toString()
+                            binding.tvCategoryValue.text = state.result.category.label
+                        }
+
+                        // 失敗時
                         is BmiUiState.Error -> {
+                            // TextEditのerrorに値を挿入
                             binding.etHeight.error = state.heightError
                             binding.etWeight.error = state.weightError
                         }
